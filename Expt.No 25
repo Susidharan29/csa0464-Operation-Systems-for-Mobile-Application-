@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+int main()
+{
+    int fd;
+    char data[100];
+    fd = open("sample.txt", O_RDONLY);
+    if(fd < 0)
+    {
+        printf("File not found\n");
+        return 1;
+    }
+    read(fd, data, 20);
+    data[20] = '\0';
+    printf("First 20 chars: %s\n", data);
+    lseek(fd, 5, SEEK_SET);
+    read(fd, data, 10);
+    data[10] = '\0';
+    printf("After lseek: %s\n", data);
+    struct stat st;
+    stat("sample.txt", &st);
+    printf("File Size = %ld bytes\n", st.st_size);
+    close(fd);
+    return 0;
+}
